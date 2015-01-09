@@ -149,6 +149,9 @@
                         if (event.bubbles === true) {
                             // check if we have modification on page
                             if (apex.jQuery(document).apexSaveBeforeExit('modificationDetected')) {
+                                apex.jQuery(document).apexSaveBeforeExit('modifiedItems', {
+                                    highlight: true
+                                });
 
                                 var r = window.confirm(uiw.options.saveMessage);
                                 if (r === true) {
