@@ -144,43 +144,68 @@
             // Revert Modifications - on change
             $(uiw.options.revertModificationsSelector)
                 .each(function () {
-                    $(this).change(function () {
-                        // check if we have modification on page
-                        if (apex.jQuery(document).apexSaveBeforeExit('modificationDetected')) {
+                    $(this).change(function (event) {
 
-                            var r = window.confirm(uiw.options.saveMessage);
-                            if (r === true) {
+                        if (event.bubbles === true) {
+                            // check if we have modification on page
+                            if (apex.jQuery(document).apexSaveBeforeExit('modificationDetected')) {
+
+                                var r = window.confirm(uiw.options.saveMessage);
+                                if (r === true) {
+                                    // don't ask me twice!!!
+                                    window.onbeforeunload = function () { /* empty because we dont want to ask! */ };
+                                    //just do what you have to do
+                                    apex.submit(this.id);
+                                } else {
+                                    // restrore value for item and stay on page
+                                    var itemId = this.id;
+                                    if (uiw.options.debug) {
+                                        apex.log('REVERT VALUE FOR: ' + itemId);
+                                    }
+
+                                    if (this.length) {
+                                        // Select List
+                                        for (var x = 0; x < this.length; x++) {
+                                            if (this.options[x].defaultSelected) {
+                                                if (uiw.options.debug) {
+                                                    apex.log('text: ' + this.options[x].text);
+                                                    apex.log('value: ' + this.options[x].value);
+                                                }
+                                                if (event.stopPropagation) {
+                                                    // W3C standard variant
+                                                    event.stopPropagation();
+                                                } else {
+                                                    // IE variant
+                                                    event.cancelBubble = true;
+                                                }
+
+                                                apex.item(itemId).setValue(this.options[x].value);
+                                                return;
+                                            }
+                                        }
+                                    } else {
+                                        // radio button or chkbox
+                                        $('[id^=' + itemId + ']').each(function () {
+                                            if (this.defaultChecked) {
+                                                if (uiw.options.debug) {
+                                                    apex.log(this.value);
+                                                }
+                                                if (event.stopPropagation) {
+                                                    // W3C standard variant
+                                                    event.stopPropagation();
+                                                } else {
+                                                    // IE variant
+                                                    event.cancelBubble = true;
+                                                }
+                                                apex.item(itemId).setValue(this.value);
+                                                return;
+                                            }
+                                        });
+                                    }
+                                }
+                            } else {
                                 //do what you have to do
                                 apex.submit(this.id);
-                            } else {
-                                // restrore value for item and stay on page
-                                var itemId = this.id;
-                                if (uiw.options.debug) {
-                                    apex.log('REVERT VALUE FOR: ' + itemId);
-                                }
-
-                                if (this.length) {
-                                    // Select List
-                                    for (var x = 0; x < this.length; x++) {
-                                        if (this.options[x].defaultSelected) {
-                                            if (uiw.options.debug) {
-                                                apex.log('text: ' + this.options[x].text);
-                                                apex.log('value: ' + this.options[x].value);
-                                            }
-                                            apex.item(itemId).setValue(this.options[x].value);
-                                        }
-                                    }
-                                } else {
-                                    // radio button or chkbox
-                                    $('[id^=' + itemId + ']').each(function () {
-                                        if (this.defaultChecked) {
-                                            if (uiw.options.debug) {
-                                                apex.log(this.value);
-                                            }
-                                            apex.item(itemId).setValue(this.value);
-                                        }
-                                    });
-                                }
                             }
                         }
                     });
