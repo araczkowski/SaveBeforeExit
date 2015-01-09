@@ -11,6 +11,7 @@ IS
    l_save_message            VARCHAR2(4000);
    l_no_warning_sel          VARCHAR2(4000);
    l_ignore_modification_sel VARCHAR2(4000);
+   l_revert_modification_sel VARCHAR2(4000);
    l_disable_time            PLS_INTEGER;
    l_highlight_modifications VARCHAR2(1);
    l_crlf                    CHAR(2) := CHR(13)||CHR(10);
@@ -22,6 +23,7 @@ BEGIN
    l_ignore_modification_sel := NVL(p_dynamic_action.attribute_03, '#pRequest');
    l_disable_time := NVL(p_dynamic_action.attribute_04, 250);
    l_highlight_modifications := NVL(p_dynamic_action.attribute_05, 'Y');
+   l_revert_modification_sel := p_dynamic_action.attribute_06;
 
    IF apex_application.g_debug
    THEN
@@ -43,11 +45,12 @@ BEGIN
    );
 
    l_result.javascript_function :=
-         'function(){apex.jQuery(document).apex_save_before_exit({' || l_crlf
+         'function(){apex.jQuery(document).apexSaveBeforeExit({' || l_crlf
       || '   ' || apex_javascript.add_attribute('saveMessage',  l_save_message) || l_crlf
       || '   ' || apex_javascript.add_attribute('noWarningSelector',  l_no_warning_sel) || l_crlf
       || '   ' || apex_javascript.add_attribute('disableTime',  l_disable_time) || l_crlf
       || '   ' || apex_javascript.add_attribute('ignoreModificationsSelector',  l_ignore_modification_sel) || l_crlf
+      || '   ' || apex_javascript.add_attribute('revertModificationsSelector',  l_revert_modification_sel) || l_crlf
       || '   ' || apex_javascript.add_attribute('highlightModifiedItems',  l_highlight_modifications, FALSE, FALSE) || l_crlf
       || '});}';
 

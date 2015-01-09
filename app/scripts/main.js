@@ -1,4 +1,5 @@
 'use strict';
+//var apex, CKEDITOR, $v;
 (function ($) {
     $.widget('ui.apexSaveBeforeExit', {
         options: {
