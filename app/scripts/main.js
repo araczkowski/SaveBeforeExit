@@ -1,7 +1,7 @@
 'use strict';
 //var apex, CKEDITOR, $v;
 
-function detectIE() {
+/*function detectIE() {
     var ua = window.navigator.userAgent;
     var msie = ua.indexOf('MSIE ');
     var trident = ua.indexOf('Trident/');
@@ -19,6 +19,36 @@ function detectIE() {
 
     // other browser
     return false;
+}*/
+
+function revertOnChange(itemId, currentVal, defaultVal, message) {
+    // confirm
+    if (defaultVal !== currentVal) {
+
+        // check if we have modification on page
+        if (apex.jQuery(document).apexSaveBeforeExit('modificationDetected')) {
+            //highlight
+            apex.jQuery(document).apexSaveBeforeExit('modifiedItems', {
+                highlight: true
+            });
+            var r = window.confirm(message);
+            if (r === true) {
+                // don't ask me twice!!!
+                window.onbeforeunload = function () {
+                    // empty because we dont want to ask again!
+                };
+                //just do what you have to do
+                apex.submit(itemId);
+            } else {
+                // restrore value for item and stay on page
+                apex.item(itemId).setValue(defaultVal);
+            }
+        } else {
+            //do what you have to do after click and change without modification on the form
+            apex.submit(itemId);
+        }
+    }
+
 }
 
 
@@ -163,80 +193,66 @@ function detectIE() {
                     }
                 });
 
-            // Revert Modifications - on change
-            if (detectIE() === 7) {
-                // special treatment for old IE - TODO
-            }
+
             $(uiw.options.revertModificationsSelector)
                 .each(function () {
-                    $(this).change(function (event) {
 
-                        if (event.bubbles === true) {
-                            // check if we have modification on page
-                            if (apex.jQuery(document).apexSaveBeforeExit('modificationDetected')) {
-                                apex.jQuery(document).apexSaveBeforeExit('modifiedItems', {
-                                    highlight: true
-                                });
+                    var varDefault, varCurrent;
+                    var itemId = this.id;
 
-                                var r = window.confirm(uiw.options.saveMessage);
-                                if (r === true) {
-                                    // don't ask me twice!!!
-                                    window.onbeforeunload = function () { /* empty because we dont want to ask! */ };
-                                    //just do what you have to do
-                                    apex.submit(this.id);
-                                } else {
-                                    // restrore value for item and stay on page
-                                    var itemId = this.id;
-                                    if (uiw.options.debug) {
-                                        apex.log('REVERT VALUE FOR: ' + itemId);
-                                    }
 
-                                    if (this.length) {
-                                        // Select List
-                                        for (var x = 0; x < this.length; x++) {
-                                            if (this.options[x].defaultSelected) {
-                                                if (uiw.options.debug) {
-                                                    apex.log('text: ' + this.options[x].text);
-                                                    apex.log('value: ' + this.options[x].value);
-                                                }
-                                                if (event.stopPropagation) {
-                                                    // W3C standard variant
-                                                    event.stopPropagation();
-                                                } else {
-                                                    // IE variant
-                                                    event.cancelBubble = true;
-                                                }
+                    if (this.length) {
+                        // Select List
+                        $(this).change(function (event) {
 
-                                                apex.item(itemId).setValue(this.options[x].value);
-                                                return;
-                                            }
-                                        }
-                                    } else {
-                                        // radio button or chkbox
-                                        $('[id^=' + itemId + ']').each(function () {
-                                            if (this.defaultChecked) {
-                                                if (uiw.options.debug) {
-                                                    apex.log(this.value);
-                                                }
-                                                if (event.stopPropagation) {
-                                                    // W3C standard variant
-                                                    event.stopPropagation();
-                                                } else {
-                                                    // IE variant
-                                                    event.cancelBubble = true;
-                                                }
-                                                apex.item(itemId).setValue(this.value);
-                                                return;
-                                            }
-                                        });
-                                    }
+                            // check if we have a change
+                            for (var x = 0; x < this.length; x++) {
+                                if (this.options[x].defaultSelected) {
+                                    varDefault = this.options[x].value;
                                 }
-                            } else {
-                                //do what you have to do
-                                apex.submit(this.id);
+                                if (this.options[x].selected) {
+                                    varCurrent = this.options[x].value;
+                                }
                             }
-                        }
-                    });
+
+                            if (event.stopPropagation) {
+                                // W3C standard variant
+                                event.stopPropagation();
+                            } else {
+                                // IE variant
+                                event.cancelBubble = true;
+                            }
+
+                            revertOnChange(itemId, varCurrent, varDefault, uiw.options.saveMessage);
+
+                        });
+
+                    } else {
+                        // radio button or chkbox
+                        $(this).click(function (event) {
+
+                            $('[id^=' + itemId + ']').each(function () {
+                                if (this.defaultChecked) {
+                                    varDefault = this.value;
+                                }
+                                if (this.checked) {
+                                    varCurrent = this.value;
+                                }
+                            });
+
+                            if (event.stopPropagation) {
+                                // W3C standard variant
+                                event.stopPropagation();
+                            } else {
+                                // IE variant
+                                event.cancelBubble = true;
+                            }
+
+                            revertOnChange(itemId, varCurrent, varDefault, uiw.options.saveMessage);
+
+                        });
+                    }
+
                 });
 
             window.onbeforeunload = function () {
