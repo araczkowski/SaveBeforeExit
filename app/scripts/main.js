@@ -1,4 +1,6 @@
 'use strict';
+//for jshint
+//var apex, CKEDITOR, $v;
 
 function revertOnChange(itemId, currentVal, defaultVal, message) {
     // confirm
