@@ -1,25 +1,4 @@
 'use strict';
-//var apex, CKEDITOR, $v;
-
-/*function detectIE() {
-    var ua = window.navigator.userAgent;
-    var msie = ua.indexOf('MSIE ');
-    var trident = ua.indexOf('Trident/');
-
-    if (msie > 0) {
-        // IE 10 or older => return version number
-        return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
-    }
-
-    if (trident > 0) {
-        // IE 11 (or newer) => return version number
-        var rv = ua.indexOf('rv:');
-        return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
-    }
-
-    // other browser
-    return false;
-}*/
 
 function revertOnChange(itemId, currentVal, defaultVal, message) {
     // confirm
@@ -34,7 +13,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
             var r = window.confirm(message);
             if (r === true) {
                 // don't ask me twice!!!
-                window.onbeforeunload = function () {
+                window.onbeforeunload = function() {
                     // empty because we dont want to ask again!
                 };
                 //just do what you have to do
@@ -52,7 +31,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
 }
 
 
-(function ($) {
+(function($) {
     $.widget('ui.apexSaveBeforeExit', {
         options: {
             saveMessage: null,
@@ -63,7 +42,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
             highlightModifiedItems: null,
             debug: $('#pdebug').length !== 0 //true boolean for ===
         },
-        _createPrivateStorage: function () {
+        _createPrivateStorage: function() {
             var uiw = this;
 
             if (uiw.options.debug) {
@@ -84,7 +63,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
                 apex.debug('Save Before Exit: _createPrivateStorage (end)');
             }
         },
-        _create: function () {
+        _create: function() {
             var uiw = this;
             var $ignoreElmts;
             var $revertElmts;
@@ -110,11 +89,11 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
                 $ignoreElmts = $(uiw.options.ignoreModificationsSelector);
 
                 if ($ignoreElmts.length) {
-                    $ignoreElmts.each(function () {
+                    $ignoreElmts.each(function() {
                         apex.debug('...Ignore modifications to: "' + this.nodeName + '"');
 
                         for (var name in this.attributes) {
-                            if (typeof (this.attributes[name]) !== 'function') {
+                            if (typeof(this.attributes[name]) !== 'function') {
                                 apex.debug('......' + this.attributes[name].nodeName + ': "' + this.attributes[name].nodeValue + '"');
                             }
                         }
@@ -137,11 +116,11 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
                 $revertElmts = $(uiw.options.revertModificationsSelector);
 
                 if ($revertElmts.length) {
-                    $revertElmts.each(function () {
+                    $revertElmts.each(function() {
                         apex.debug('...Ignore modifications to: "' + this.nodeName + '"');
 
                         for (var name in this.attributes) {
-                            if (typeof (this.attributes[name]) !== 'function') {
+                            if (typeof(this.attributes[name]) !== 'function') {
                                 apex.debug('......' + this.attributes[name].nodeName + ': "' + this.attributes[name].nodeValue + '"');
                             }
                         }
@@ -163,7 +142,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
             }
 
             $noWarnElmts
-                .each(function () {
+                .each(function() {
                     var $this = $(this);
                     var onClickHandler = $this.prop('onclick');
 
@@ -171,7 +150,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
                         apex.debug('...Disable warnings for: "' + this.nodeName + '"');
 
                         for (var name in this.attributes) {
-                            if (typeof (this.attributes[name]) !== 'function') {
+                            if (typeof(this.attributes[name]) !== 'function') {
                                 apex.debug('......' + this.attributes[name].nodeName + ': "' + this.attributes[name].nodeValue + '"');
                             }
                         }
@@ -181,13 +160,13 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
                         $this
                             .removeAttr('onclick')
                             .prop('onclick', null)
-                            .click(function () {
+                            .click(function() {
                                 uiw._disableWarningTemp();
                                 onClickHandler();
                             });
                     } else {
                         $this
-                            .click(function () {
+                            .click(function() {
                                 uiw._disableWarningTemp();
                             });
                     }
@@ -195,7 +174,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
 
 
             $(uiw.options.revertModificationsSelector)
-                .each(function () {
+                .each(function() {
 
                     var varDefault, varCurrent;
                     var itemId = this.id;
@@ -203,7 +182,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
 
                     if (this.length) {
                         // Select List
-                        $(this).change(function (event) {
+                        $(this).change(function(event) {
 
                             // check if we have a change
                             for (var x = 0; x < this.length; x++) {
@@ -229,9 +208,9 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
 
                     } else {
                         // radio button or chkbox
-                        $(this).click(function (event) {
+                        $(this).click(function(event) {
 
-                            $('[id^=' + itemId + ']').each(function () {
+                            $('[id^=' + itemId + ']').each(function() {
                                 if (this.defaultChecked) {
                                     varDefault = this.value;
                                 }
@@ -255,7 +234,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
 
                 });
 
-            window.onbeforeunload = function () {
+            window.onbeforeunload = function() {
                 if (uiw._values.forcePrompt) {
                     if ($.browser.msie) { //fix IE issue regarding anchors with "javascript:" that cause multiple warnings.
                         uiw._disableWarningTemp();
@@ -285,7 +264,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
 
             $('form#wwvFlowForm fieldset.shuttle')
                 .not(uiw.options.ignoreModificationsSelector)
-                .each(function () {
+                .each(function() {
                     var loadVal = $v(this.id);
 
                     $(this).data('apex-sbe-load-val', loadVal);
@@ -295,7 +274,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
                 apex.debug('Save Before Exit: _create (end)');
             }
         },
-        _disableWarningTemp: function () {
+        _disableWarningTemp: function() {
             var uiw = this;
 
             if (uiw.options.debug) {
@@ -304,7 +283,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
 
             uiw._values.promptUser = false;
 
-            setTimeout(function () {
+            setTimeout(function() {
                 uiw.enableWarning();
             }, uiw.options.disableTime); // Use closure to re-enable shortly.
 
@@ -312,7 +291,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
                 apex.debug('Save Before Exit: _disableWarningTemp (end)');
             }
         },
-        _detectModifications: function (shortCircuit, highlightModifiedItems, trackModifiedItems) {
+        _detectModifications: function(shortCircuit, highlightModifiedItems, trackModifiedItems) {
             var uiw = this;
 
             if (uiw.options.debug) {
@@ -327,11 +306,11 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
             }
 
             $('form#wwvFlowForm input[type="text"],' +
-                'form#wwvFlowForm input[type="file"],' +
-                'form#wwvFlowForm input[type="password"],' +
-                'form#wwvFlowForm input[type="hidden"]')
+                    'form#wwvFlowForm input[type="file"],' +
+                    'form#wwvFlowForm input[type="password"],' +
+                    'form#wwvFlowForm input[type="hidden"]')
                 .not(uiw.options.ignoreModificationsSelector)
-                .each(function () {
+                .each(function() {
                     if (this.value !== this.defaultValue) {
                         uiw._values.itemModified = true;
 
@@ -360,9 +339,9 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
             }
 
             $('form#wwvFlowForm input[type="radio"],' +
-                'form#wwvFlowForm input[type="checkbox"]')
+                    'form#wwvFlowForm input[type="checkbox"]')
                 .not(uiw.options.ignoreModificationsSelector)
-                .each(function () {
+                .each(function() {
                     if (this.checked !== this.defaultChecked) {
                         uiw._values.itemModified = true;
 
@@ -392,7 +371,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
 
             $('form#wwvFlowForm fieldset.shuttle')
                 .not(uiw.options.ignoreModificationsSelector)
-                .each(function () {
+                .each(function() {
                     var currVal = $v(this.id);
                     var dfltVal = $(this).data('apex-sbe-load-val');
 
@@ -429,7 +408,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
 
             $('form#wwvFlowForm select:not(.shuttle_left,.shuttle_right)')
                 .not(uiw.options.ignoreModificationsSelector)
-                .each(function () {
+                .each(function() {
                     for (var x = 0; x < this.length; x++) {
                         if (this.options[x].selected !== this.options[x].defaultSelected) {
                             uiw._values.itemModified = true;
@@ -461,7 +440,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
 
             $('form#wwvFlowForm textarea:not(.rich_text_editor)')
                 .not(uiw.options.ignoreModificationsSelector)
-                .each(function () {
+                .each(function() {
                     if (this.value !== this.defaultValue) {
                         uiw._values.itemModified = true;
 
@@ -491,7 +470,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
 
             $('form#wwvFlowForm textarea.rich_text_editor')
                 .not(uiw.options.ignoreModificationsSelector)
-                .each(function () {
+                .each(function() {
                     try {
                         if (CKEDITOR.instances[this.id].checkDirty()) {
                             uiw._values.itemModified = true;
@@ -519,7 +498,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
                     }
                 });
         },
-        modificationDetected: function () {
+        modificationDetected: function() {
             var uiw = this;
 
             if (uiw.options.debug) {
@@ -535,7 +514,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
 
             return uiw._values.itemModified;
         },
-        modifiedItems: function (opts) {
+        modifiedItems: function(opts) {
             var uiw = this;
             var defaults = {
                 highlight: false
@@ -554,7 +533,28 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
 
             return uiw._elements.$modifiedItems;
         },
-        enableWarning: function () {
+        resetModifiedItems: function() {
+            var uiw = this;
+
+            if (uiw.options.debug) {
+                apex.debug('Save Before Exit: resetModifiedItems (start)');
+            }
+
+            uiw._values = {
+                itemModified: false,
+                promptUser: true,
+                forcePrompt: false
+            };
+
+            uiw._elements = {
+                $modifiedItems: $() //empty jQuery object
+            };
+
+            if (uiw.options.debug) {
+                apex.debug('Save Before Exit: resetModifiedItems (end)');
+            }
+        },
+        enableWarning: function() {
             var uiw = this;
 
             if (uiw.options.debug) {
@@ -567,7 +567,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
                 apex.debug('Save Before Exit: enableWarning (end)');
             }
         },
-        disableWarning: function () {
+        disableWarning: function() {
             var uiw = this;
 
             if (uiw.options.debug) {
@@ -580,7 +580,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
                 apex.debug('Save Before Exit: disableWarning (end)');
             }
         },
-        enableWarningForce: function () {
+        enableWarningForce: function() {
             var uiw = this;
 
             if (uiw.options.debug) {
@@ -593,7 +593,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
                 apex.debug('Save Before Exit: enableWarningForce (end)');
             }
         },
-        disableWarningForce: function () {
+        disableWarningForce: function() {
             var uiw = this;
 
             if (uiw.options.debug) {
@@ -606,7 +606,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
                 apex.debug('Save Before Exit: disableWarningForce (end)');
             }
         },
-        warningForceEnabled: function () {
+        warningForceEnabled: function() {
             var uiw = this;
 
             if (uiw.options.debug) {
