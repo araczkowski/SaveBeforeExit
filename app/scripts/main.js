@@ -542,6 +542,16 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
                 apex.debug('Save Before Exit: resetModifiedItems (start)');
             }
 
+            $('form#wwvFlowForm input[type="text"],' +
+                    'form#wwvFlowForm input[type="file"],' +
+                    'form#wwvFlowForm input[type="password"],' +
+                    'form#wwvFlowForm input[type="hidden"]')
+                .not(uiw.options.ignoreModificationsSelector)
+                .each(function() {
+                    this.defaultValue = this.value;
+                });
+            //empty function
+            window.onbeforeunload = function() {};
             uiw._values = {
                 itemModified: false,
                 promptUser: true,
