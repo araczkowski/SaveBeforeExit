@@ -535,6 +535,21 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
 
             return uiw._elements.$modifiedItems;
         },
+        /**
+         * Removes all functionality associcated with widget
+         * In most cases in APEX, this won't be necessary
+         */
+        destroy: function() {
+            var uiw = this;
+            $.console.log(uiw._scope, 'destroy', uiw);
+            //restore
+            window.onbeforeunload = function() {};
+            $.Widget.prototype.destroy.apply(uiw, arguments); // default destroy
+        },
+        getOptions: function(){
+            var uiw = this;
+            return uiw.options;
+        },
         resetModifiedItems: function() {
             var uiw = this;
 
@@ -550,7 +565,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
             //     .each(function() {
             //         this.defaultValue = this.value;
             //     });
-            _create();
+            uiw._create();
             //empty function
             window.onbeforeunload = function() {};
             uiw._values = {
