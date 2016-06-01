@@ -1,6 +1,6 @@
 'use strict';
 
-//apex namespace
+//apex namespace - for test only!!!
 // var CKEDITOR, $v;
 // var apex = {
 //     name: 'apex',
@@ -8,7 +8,7 @@
 //         console.log(m);
 //     }
 // };
-//
+
 
 function revertOnChange(itemId, currentVal, defaultVal, message) {
     // confirm
@@ -580,6 +580,29 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
                 .each(function() {
                     this.defaultValue = this.value;
                 });
+
+            $('form#wwvFlowForm input[type="radio"],' +
+                    'form#wwvFlowForm input[type="checkbox"]')
+                .not(uiw.options.ignoreModificationsSelector)
+                .each(function() {
+                    this.defaultChecked = this.checked;
+                });
+
+
+            $('form#wwvFlowForm select:not(.shuttle_left,.shuttle_right)')
+                .not(uiw.options.ignoreModificationsSelector)
+                .each(function() {
+                    for (var x = 0; x < this.length; x++) {
+                        this.options[x].defaultSelected = this.options[x].selected;
+                    }
+                });
+            $('form#wwvFlowForm fieldset.shuttle')
+                .not(uiw.options.ignoreModificationsSelector)
+                .each(function() {
+                    var loadVal = $v(this.id);
+
+                    $(this).data('apex-sbe-load-val', loadVal);
+                });
             uiw._values = {
                 itemModified: false,
                 promptUser: true,
@@ -658,4 +681,4 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
             return uiw._values.forcePrompt;
         }
     });
-})(apex.jQuery); //$ - for tests 
+})(apex.jQuery); //$ - for tests  -- for prod!!! apex.jQuery
