@@ -1,13 +1,13 @@
 'use strict';
 
 //apex namespace
-var CKEDITOR, $v;
-var apex = {
-    name: 'apex',
-    debug: function(m) {
-        console.log(m);
-    }
-};
+// var CKEDITOR, $v;
+// var apex = {
+//     name: 'apex',
+//     debug: function(m) {
+//         console.log(m);
+//     }
+// };
 //
 
 function revertOnChange(itemId, currentVal, defaultVal, message) {
@@ -658,4 +658,4 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
             return uiw._values.forcePrompt;
         }
     });
-})($); //apex.jQuery
+})(apex.jQuery); //$ - for tests 
