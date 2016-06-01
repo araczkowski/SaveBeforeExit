@@ -2,7 +2,8 @@
   "name": "savebeforeexit",
   "private": true,
   "dependencies": {
-    "jquery": "~1.11.0"
+    "jquery": "1.9.1",
+    "jquery-ui": "^1.11.4"
   },
   "devDependencies": {}
 }

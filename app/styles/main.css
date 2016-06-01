@@ -3,7 +3,6 @@ body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #333;
 }
-
 .hero-unit {
     margin: 50px auto 0 auto;
     width: 300px;
@@ -14,16 +13,19 @@ body {
     border-radius: 6px;
     padding: 60px;
 }
-
 .hero-unit h1 {
     font-size: 60px;
     line-height: 1;
     letter-spacing: -1px;
 }
-
 .browsehappy {
     margin: 0.2em 0;
     background: #ccc;
     color: #000;
     padding: 0.2em 0;
+}
+.apex-save-before-exit-highlight {
+    background-color: #FFFFCC !important;
+    border: 1px solid #CC9900 !important;
+    padding: 2px !important;
 }

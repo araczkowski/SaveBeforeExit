@@ -1,6 +1,14 @@
 'use strict';
-//for jshint
-//var apex, CKEDITOR, $v;
+
+//apex namespace
+var CKEDITOR, $v;
+var apex = {
+    name: 'apex',
+    debug: function(m) {
+        console.log(m);
+    }
+};
+//
 
 function revertOnChange(itemId, currentVal, defaultVal, message) {
     // confirm
@@ -541,12 +549,19 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
          */
         destroy: function() {
             var uiw = this;
-            $.console.log(uiw._scope, 'destroy', uiw);
-            //restore
+
+            if (uiw.options.debug) {
+                apex.debug('Save Before Exit: destroy (start)');
+            }
+
             window.onbeforeunload = function() {};
-            $.Widget.prototype.destroy.apply(uiw, arguments); // default destroy
+            $.Widget.prototype.destroy.call(uiw);
+
+            if (uiw.options.debug) {
+                apex.debug('Save Before Exit: destroy (end)');
+            }
         },
-        getOptions: function(){
+        getOptions: function() {
             var uiw = this;
             return uiw.options;
         },
@@ -557,17 +572,14 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
                 apex.debug('Save Before Exit: resetModifiedItems (start)');
             }
 
-            // $('form#wwvFlowForm input[type="text"],' +
-            //         'form#wwvFlowForm input[type="file"],' +
-            //         'form#wwvFlowForm input[type="password"],' +
-            //         'form#wwvFlowForm input[type="hidden"]')
-            //     .not(uiw.options.ignoreModificationsSelector)
-            //     .each(function() {
-            //         this.defaultValue = this.value;
-            //     });
-            uiw._create();
-            //empty function
-            window.onbeforeunload = function() {};
+            $('form#wwvFlowForm input[type="text"],' +
+                    'form#wwvFlowForm input[type="file"],' +
+                    'form#wwvFlowForm input[type="password"],' +
+                    'form#wwvFlowForm input[type="hidden"]')
+                .not(uiw.options.ignoreModificationsSelector)
+                .each(function() {
+                    this.defaultValue = this.value;
+                });
             uiw._values = {
                 itemModified: false,
                 promptUser: true,
@@ -577,6 +589,8 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
             uiw._elements = {
                 $modifiedItems: $() //empty jQuery object
             };
+
+            $('.apex-save-before-exit-highlight').removeClass('apex-save-before-exit-highlight');
 
             if (uiw.options.debug) {
                 apex.debug('Save Before Exit: resetModifiedItems (end)');
@@ -644,4 +658,4 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
             return uiw._values.forcePrompt;
         }
     });
-})(apex.jQuery);
+})($); //apex.jQuery

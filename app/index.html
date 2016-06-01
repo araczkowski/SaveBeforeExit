@@ -10,7 +10,6 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
-
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -19,35 +18,53 @@
 </head>
 
 <body>
-    <!--[if lt IE 10]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+    <div id="pdebug"></div>
+    <form id="wwvFlowForm">
+        First name:
+        <br>
+        <input type="text" value="Mickey">
+        <br> Last name:
+        <br>
+        <input type="text" name="lastname" value="Mouse">
+        <br>
+        <br>
+        <input type="radio" name="gender" value="male" checked> Male
+        <br>
+        <input type="radio" name="gender" value="female"> Female
+        <br>
+        <input type="radio" name="gender" value="other"> Other
+        <br>
+        <br>
+        <input type="button" value="Refresh" onClick="window.location.reload()">
+        <br>
+        <br>
+        <input type="button" value="Reset modified items" onClick="$(document).apexSaveBeforeExit('resetModifiedItems')">
+    </form>
 
+    <script src="../bower_components/jquery/jquery.js"></script>
+    <script src="../bower_components/jquery-ui/jquery-ui.js"></script>
 
-    <div class="hero-unit">
-        <h1>'Allo, 'Allo!</h1>
-        <p>You now have SaveBeforeExit test page</p>
-        <ul>
-            <li>HTML5 Boilerplate</li>
-
-
-        </ul>
-    </div>
-
-
-    <!-- build:js scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="../bower_components/jquery/dist/jquery.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
     <!-- build:js({app,.tmp}) scripts/main.js -->
     <script src="scripts/main.js"></script>
     <!-- endbuild -->
     <script>
-        $(function () {
+        // function() {
+        //     apex.jQuery(document).apexSaveBeforeExit({
+        //         "saveMessage": "Attention, les changements effectu\u00E9s ne seront pas sauvegard\u00E9s! \u00CAtes-vous s\u00FBr de continuer?",
+        //         "noWarningSelector": "table.disable_warning_on_exit a",
+        //         "disableTime": 250,
+        //         "ignoreModificationsSelector": "#P47_UNIT_ID,#P47_VACATION_0",
+        //         "revertModificationsSelector": "#P47_UNIT_ID,#P47_VACATION,#P47_MODEL_ID",
+        //         "highlightModifiedItems": "Y"
+        //     });
+        // }
+        $(function() {
+            $.browser = {
+                msie: false
+            };
             $(document).apexSaveBeforeExit({
                 "saveMessage": "You have made changes to data on this page.  If you navigate away from this page without first saving your data, the changes will be lost.",
-                "noWarningSelector": ":button",
+                "noWarningSelector": "table.disable_warning_on_exit a",
                 "disableTime": 250,
                 "ignoreModificationsSelector": "#pRequest",
                 "revertModificationsSelector": "#P5_VACATION,#P5_DAY,#P5_UNIT",
