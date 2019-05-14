@@ -246,10 +246,6 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
 
             window.onbeforeunload = function() {
                 if (uiw._values.forcePrompt) {
-                    if ($.browser.msie) { //fix IE issue regarding anchors with "javascript:" that cause multiple warnings.
-                        uiw._disableWarningTemp();
-                    }
-
                     return uiw.options.saveMessage;
                 } else if (uiw._values.promptUser) {
                     if (uiw.options.highlightModifiedItems === 'Y') {
@@ -260,10 +256,6 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
 
                     if (uiw._values.itemModified === false) {
                         return;
-                    }
-
-                    if ($.browser.msie) { //fix IE issue regarding anchors with "javascript:" that cause multiple warnings.
-                        uiw._disableWarningTemp();
                     }
 
                     if (uiw._values.itemModified) {
