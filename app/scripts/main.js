@@ -264,7 +264,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
                 }
             };
 
-            $('form#wwvFlowForm fieldset.shuttle')
+            $('form#wwvFlowForm div.apex-item-group--shuttle')
                 .not(uiw.options.ignoreModificationsSelector)
                 .each(function() {
                     var loadVal = $v(this.id);
@@ -371,7 +371,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
                 return true;
             }
 
-            $('form#wwvFlowForm fieldset.shuttle')
+            $('form#wwvFlowForm div.apex-item-group--shuttle')
                 .not(uiw.options.ignoreModificationsSelector)
                 .each(function() {
                     var currVal = $v(this.id);
@@ -588,7 +588,7 @@ function revertOnChange(itemId, currentVal, defaultVal, message) {
                         this.options[x].defaultSelected = this.options[x].selected;
                     }
                 });
-            $('form#wwvFlowForm fieldset.shuttle')
+            $('form#wwvFlowForm div.apex-item-group--shuttle')
                 .not(uiw.options.ignoreModificationsSelector)
                 .each(function() {
                     var loadVal = $v(this.id);
